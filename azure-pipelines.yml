@@ -1,61 +1,34 @@
-# Python package
+# Python package pipeline
 # Create and test a Python package on multiple Python versions.
-# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 trigger:
-
-- master
-
+- main  # Trigger the pipeline for changes in the 'main' branch.
 
 pool:
-
-
-  vmImage: 'ubuntu-latest'
-
+  vmImage: 'ubuntu-latest'  # Use Ubuntu as the build environment.
 
 strategy:
-
-
   matrix:
-
-
     Python27:
-
-
-      python.version: '2.7'
-
-
+      python.version: '2.7'  # Define Python version to use.
 
 steps:
-
-
+# Step 1: Use the specified Python version
 - task: UsePythonVersion@0
-
-
   inputs:
-
-
     versionSpec: '$(python.version)'
-
-
   displayName: 'Use Python $(python.version)'
 
+# Step 2: Run a Python script (e.g., add.py)
+- script: |
+    python add.py  # Replace with your actual script path or command
+  displayName: 'Run Python Script'
 
-- script: python "add.py"
-
-
-
+# Step 3: Inline Python script execution
 - task: PythonScript@0
-
-
   inputs:
-
-
-scriptSource: 'inline'
-
-
+    scriptSource: 'inline'
     script: |
       print('AZURE PIPELINE')
       print('CONTINUOUS INTEGRATION & CONTINUOUS DEPLOYMENT')
-
+  displayName: 'Execute Inline Python Script'
